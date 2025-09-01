@@ -9,16 +9,16 @@
 
   # Modular imports for Home Manager
   imports = [
-    ./modules/packages.nix
-    ./modules/sway.nix
-    ./modules/programs.nix
-    ./modules/services.nix
-    ./modules/git.nix
-    ./modules/fonts.nix
-    ./modules/waybar.nix
-    ./modules/foot.nix
-    ./modules/wofi.nix
-    ./modules/edge-flatpak.nix
-    ./modules/windsurf.nix
+    ./modules/apps/packages.nix
+    ./modules/integration/sway.nix
+    ./modules/apps/programs.nix
+    ./modules/integration/services.nix
+    ./modules/dev/git.nix
+    ./modules/integration/fonts.nix
+    ./modules/apps/waybar.nix
+    ./modules/apps/foot.nix
+    ./modules/apps/wofi.nix
+    ./modules/integration/edge-flatpak.nix
+    ./modules/dev/windsurf.nix
   ];
 }
