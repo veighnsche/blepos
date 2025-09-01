@@ -4,6 +4,9 @@
   home.homeDirectory = "/home/vince";
   home.stateVersion = "24.05";
 
+  # Used by home/modules/windsurf.nix to fetch the latest AppImage
+  home.sessionVariables.WINDSURF_APPIMAGE_URL = "https://windsurf-stable.codeium.com/api/update/linux-x64/stable/latest";
+
   # Modular imports for Home Manager
   imports = [
     ./modules/packages.nix
@@ -15,5 +18,7 @@
     ./modules/waybar.nix
     ./modules/foot.nix
     ./modules/wofi.nix
+    ./modules/edge-flatpak.nix
+    ./modules/windsurf.nix
   ];
 }

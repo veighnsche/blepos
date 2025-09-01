@@ -21,66 +21,26 @@ A personal Nix/NixOS flakes repository to manage system configurations, Home Man
 
 ## Quick Start
 
-This repo is currently empty. To bootstrap:
+1) Generate hardware config on the target NixOS host (nuc):
+```bash
+sudo nixos-generate-config --show-hardware-config > hosts/nuc/hardware-configuration.nix
+```
 
-1. Initialize a flake:
-   ```bash
-   nix flake init -t github:nix-community/nixdirenv#minimal  # or: -t templates from your choice
-   # Or start from an empty flake:
-   cat > flake.nix <<'EOF'
-   {
-     description = "blepos — personal Nix/NixOS flakes";
+2) Pin inputs and validate the flake:
+```bash
+nix flake update
+nix flake check
+```
 
-     inputs = {
-       nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-       # home-manager.url = "github:nix-community/home-manager";
-       # home-manager.inputs.nixpkgs.follows = "nixpkgs";
-     };
+3) Switch the system to this flake:
+```bash
+sudo nixos-rebuild switch --flake .#nuc
+```
 
-     outputs = { self, nixpkgs, ... }@inputs: let
-       systems = [ "x86_64-linux" "aarch64-linux" ];
-       forAllSystems = f: nixpkgs.lib.genAttrs systems (s: f s);
-     in {
-       # Dev shells for hacking on this repo
-       devShells = forAllSystems (system: let pkgs = import nixpkgs { inherit system; }; in {
-         default = pkgs.mkShell { buildInputs = [ pkgs.nixfmt-rfc-style pkgs.git ]; };
-       });
-
-       # Placeholders for future use
-       packages = forAllSystems (system: {});
-       apps = forAllSystems (system: {});
-
-       # Example NixOS configuration: define hosts under ./nixos/...
-       # nixosConfigurations = {
-       #   my-host = nixpkgs.lib.nixosSystem {
-       #     system = "x86_64-linux";
-       #     modules = [ ./nixos/hosts/my-host/configuration.nix ];
-       #   };
-       # };
-
-       # Example Home Manager: define users under ./home/...
-       # homeConfigurations = {
-       #   "vince@machine" = inputs.home-manager.lib.homeManagerConfiguration {
-       #     pkgs = import nixpkgs { system = "x86_64-linux"; };
-       #     modules = [ ./home/vince/home.nix ];
-       #   };
-       # };
-     };
-   }
-   EOF
-   ```
-
-2. Pin inputs and check:
-   ```bash
-   nix flake update
-   nix flake check
-   ```
-
-3. Commit the baseline:
-   ```bash
-   git add .
-   git commit -m "init: flake skeleton for blepos"
-   ```
+4) Optionally switch Home Manager directly (without full NixOS rebuild):
+```bash
+home-manager switch --flake .#"vince@nuc"
+```
 
 ## Common Workflows
 
@@ -101,23 +61,33 @@ This repo is currently empty. To bootstrap:
 
 - **NixOS rebuild (from this flake)**:
   ```bash
-  sudo nixos-rebuild switch --flake .#<hostname>
+  sudo nixos-rebuild switch --flake .#nuc
   ```
 
 - **Home Manager switch (flake)**:
   ```bash
-  home-manager switch --flake .#<user>@<host>
+  home-manager switch --flake .#"vince@nuc"
   ```
+
+## Repository Structure
+
+- `flake.nix` — inputs (nixpkgs, home-manager) and outputs
+- `hosts/nuc/configuration.nix` — minimal host entrypoint (hostname + imports)
+- `hosts/nuc/hardware-configuration.nix` — generated hardware config
+- `hosts/nuc/modules/` — small focused NixOS modules:
+  - `boot.nix`, `locale.nix`, `users.nix`, `nix.nix`, `networking.nix`, `firewall.nix`
+  - `audio.nix`, `greetd-sway.nix`, `graphics.nix`, `fonts.nix`, `packages.nix`, `services.nix`, `security.nix`, `state.nix`
+- `home/vince.nix` — minimal Home Manager entrypoint (user metadata + imports)
+- `home/modules/` — user modules: `packages.nix`, `sway.nix`, `programs.nix`, `services.nix`, `git.nix`, `fonts.nix`, `waybar.nix`, `foot.nix`, `wofi.nix`
 
 ## Suggested Layout
 
-- `flake.nix` — top-level inputs/outputs
 - `flake.lock` — pinned inputs (auto-generated)
-- `nixos/hosts/<host>/configuration.nix` — host configs
-- `nixos/modules/*.nix` — reusable NixOS modules
-- `home/<user>/*.nix` — Home Manager configs
-- `overlays/*.nix` — package overlays
-- `pkgs/<name>/default.nix` — custom packages
+- `hosts/<host>/configuration.nix` — host configs
+- `hosts/<host>/modules/*.nix` — per-host modules
+- `home/<user>/modules/*.nix` — per-user modules
+- `overlays/*.nix` — package overlays (optional)
+- `pkgs/<name>/default.nix` — custom packages (optional)
 
 ## Tips
 

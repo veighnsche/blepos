@@ -19,6 +19,7 @@
     ./modules/graphics.nix
     ./modules/fonts.nix
     ./modules/packages.nix
+    ./modules/bluetooth.nix
     ./modules/services.nix
     ./modules/security.nix
     ./modules/state.nix
