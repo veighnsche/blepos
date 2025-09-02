@@ -23,6 +23,7 @@
           # Home Manager as a NixOS module for system-wide integration
           home-manager.nixosModules.home-manager
           {
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.vince = import ./home/vince.nix;
