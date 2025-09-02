@@ -8,7 +8,7 @@
     foot
     # Ensure python for Waybar scripts
     python3
-    # Wayland helpers from Arch inventory
+    # Wayland helpers
     slurp
     wev
     # Utilities / apps
