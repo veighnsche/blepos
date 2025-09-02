@@ -19,6 +19,7 @@
     ./modules/apps/foot.nix
     ./modules/apps/wofi.nix
     ./modules/integration/edge-flatpak.nix
+    ./modules/dev/neovim.nix
     ./modules/dev/windsurf.nix
   ];
 }
