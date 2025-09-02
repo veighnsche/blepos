@@ -69,6 +69,32 @@ home-manager switch --flake .#"vince@nuc"
   home-manager switch --flake .#"vince@nuc"
   ```
 
+## Bootstrap on Arch (later)
+
+Do this when you decide to try Home Manager on Arch. These commands are safe and reversible.
+
+1) Install Nix (multi-user) and enable flakes:
+```bash
+sh <(curl -L https://nixos.org/nix/install) --daemon
+echo "experimental-features = nix-command flakes" | sudo tee /etc/nix/nix.conf
+```
+
+2) Run Home Manager from this flake (simpler alias):
+```bash
+home-manager switch --flake .#vince
+```
+
+3) Alternative build-then-activate (no HM in profile):
+```bash
+nix build .#homeConfigurations.vince.activationPackage
+./result/activate
+```
+
+4) When moving to NixOS later (on the NUC):
+```bash
+sudo nixos-rebuild switch --flake .#nuc
+```
+
 ## Repository Structure
 
 - `flake.nix` — inputs (nixpkgs, home-manager) and outputs

@@ -36,6 +36,12 @@
         modules = [ ./home/vince.nix ];
       };
 
+      # Simpler alias (hostname-agnostic) for convenience on non-NixOS
+      homeConfigurations."vince" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [ ./home/vince.nix ];
+      };
+
       # Optional: a dev shell for working on this repo
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [

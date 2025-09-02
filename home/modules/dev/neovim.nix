@@ -14,8 +14,4 @@
     fd
     unzip
   ];
-
-  # Wire the repo-managed Neovim config
-  # Place your Neovim files under: home/dotfiles/nvim/
-  xdg.configFile."nvim".source = ../../dotfiles/nvim;
 }
